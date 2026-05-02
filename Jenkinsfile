@@ -1,24 +1,26 @@
 pipeline {
-    agent any
-    
-    tools {
-        jdk 'jdk17'
+    agent {label "agent-1"}
+    tools{
         maven 'maven3.9'
+        jdk 'jdk17'
     }
-    
-    stages {   
-        stage('Compile') {
+
+    stages {
+        stage('Git Checkout') {
             steps {
-            sh 'mvn compile'
+                git branch: 'main', url: 'https://github.com/baskeykuna80/Boardgame.git'
             }
         }
-        
+        stage('Compilation') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
         stage('Test') {
             steps {
                 sh 'mvn test'
             }
         }
-        
         stage('Build') {
             steps {
                 sh 'mvn package'
