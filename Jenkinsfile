@@ -4,12 +4,6 @@ pipeline {
         maven 'maven3.9'
         jdk 'jdk17'
     }
-    stages {
-        stage('Git Checkout') {
-            steps {
-                git branch: 'main', url: 'https://github.com/jaiswaladi246/Boardgame.git'
-            }
-        }
         stage('Compile') {
             steps {
                 sh 'mvn compile'
