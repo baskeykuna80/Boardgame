@@ -1,9 +1,12 @@
 pipeline {
-    agent {label 'slave1'}
-    tools{
+    agent { label 'slave1' }
+
+    tools {
         maven 'maven3.9'
         jdk 'jdk17'
     }
+
+    stages {
         stage('Compile') {
             steps {
                 sh 'mvn compile'
@@ -26,4 +29,3 @@ pipeline {
         }
     }
 }
-
