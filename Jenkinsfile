@@ -1,17 +1,16 @@
 pipeline {
-    agent {label "agent-1"}
+    agent {label 'slave1'}
     tools{
         maven 'maven3.9'
         jdk 'jdk17'
     }
-
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/baskeykuna80/Boardgame.git'
+                git branch: 'main', url: 'https://github.com/jaiswaladi246/Boardgame.git'
             }
         }
-        stage('Compilation') {
+        stage('Compile') {
             steps {
                 sh 'mvn compile'
             }
@@ -26,5 +25,11 @@ pipeline {
                 sh 'mvn package'
             }
         }
+        stage('Completed Project') {
+            steps {
+                echo "Execution has been completed , Please check"
+            }
+        }
     }
 }
+
