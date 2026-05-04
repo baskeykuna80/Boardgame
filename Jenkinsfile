@@ -1,31 +1,21 @@
 pipeline {
-    agent { label 'slave1' }
-
-    tools {
-        maven 'maven3'
-        jdk 'jdk17'
-    }
+    agent any
 
     stages {
-        stage('Compile') {
+        stage('Stage1') {
             steps {
-                sh 'mvn compile'
+                echo 'Hello World from A'
             }
         }
-        stage('Test') {
+        stage('Stage2') {
             steps {
-                sh 'mvn test'
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'mvn package'
-            }
-        }
-        stage('Completed Project') {
-            steps {
-                echo "Execution has been completed , Please check"
+                echo 'Hello World from A'
             }
         }
     }
+ post{
+     success{
+         build job: 'B'
+     }
+ }
 }
