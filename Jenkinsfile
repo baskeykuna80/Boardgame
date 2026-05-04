@@ -1,21 +1,22 @@
 pipeline {
     agent any
-
+    tools{
+        maven 'maven3'
+        jdk 'jdk17'
+    }
+    parameters{
+        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
+    }
     stages {
-        stage('Stage1') {
+        stage('Git Checkout') {
             steps {
-                echo 'Hello World from A'
+                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/baskeykuna80/Boardgame.git'
             }
         }
-        stage('Stage2') {
+        stage('BUILD') {
             steps {
-                echo 'Hello World from A'
+                sh 'mvn package'
             }
         }
     }
- post{
-     success{
-         build job: 'B'
-     }
- }
 }
