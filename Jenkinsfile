@@ -1,21 +1,59 @@
 pipeline {
     agent any
-    tools{
+
+    tools {
         maven 'maven3'
-        jdk 'jdk17'
+        jdk 'jdk 17'
     }
-    parameters{
-        string(name: 'BRANCH_NAME', defaultValue: 'main', description: 'Git branch to build')
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanar'
     }
+
     stages {
+
         stage('Git Checkout') {
             steps {
-                git branch: "${params.BRANCH_NAME}", url: 'https://github.com/baskeykuna80/Boardgame.git'
+                git branch: 'main',
+                url: 'https://github.com/baskeykuna80/Boardgame.git'
             }
         }
-        stage('BUILD') {
+
+        stage('Compilation') {
+            steps {
+                sh 'mvn compile'
+            }
+        }
+
+        stage('Testing') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectName=Boardgame \
+                    -Dsonar.projectKey=Boardgame \
+                    -Dsonar.java.binaries=target
+                    '''
+                }
+            }
+        }
+
+        stage('Package') {
             steps {
                 sh 'mvn package'
+            }
+        }
+
+        stage('Completed') {
+            steps {
+                echo 'Completed'
             }
         }
     }
